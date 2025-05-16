@@ -1,6 +1,5 @@
 package com.ReadyStream.backend.bots;
 
-
 import com.ReadyStream.backend.agents.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +17,25 @@ public class InstagramBot implements Bot {
     private final EngagementAgent engagementAgent;
     private final AnalyticsAgent analyticsAgent;
 
-    public InstagramBot(ContentCreationAgent c, EditAgent e, PostAgent p,
-                        PromotionAgent promo, EngagementAgent engage, AnalyticsAgent analytics) {
-        this.contentCreationAgent = c;
-        this.editAgent = e;
-        this.postAgent = p;
-        this.promotionAgent = promo;
-        this.engagementAgent = engage;
-        this.analyticsAgent = analytics;
+    public InstagramBot() {
+        this.contentCreationAgent = new ContentCreationAgent();
+        this.editAgent = new EditAgent();
+        this.postAgent = new PostAgent();
+        this.promotionAgent = new PromotionAgent();
+        this.engagementAgent = new EngagementAgent();
+        this.analyticsAgent = new AnalyticsAgent();
+    }
+
+    // Explicit call method, could be triggered via API or internally
+    public void postToInstagram() {
+        String content = contentCreationAgent.createContent("Instagram");
+        String edited = editAgent.editContent(content);
+        String promo = promotionAgent.promoteContent("Instagram", edited);
+        postAgent.postToPlatform("Instagram", promo);
+        engagementAgent.engage("Instagram");
+        analyticsAgent.report("Instagram");
+
+        logger.info("📸 Posting to Instagram: {}", promo);
     }
 
     @Override
@@ -37,12 +47,7 @@ public class InstagramBot implements Bot {
         engagementAgent.engage("Instagram");
         analyticsAgent.report("Instagram");
         logger.info("Posted to Instagram: {}", promo);
-
-        logger.info("📸 Posting to Instagram: {}", content);
-        // You can integrate actual APIs later
-    }
-
-    public void postToInstagram() {
     }
 }
+
 

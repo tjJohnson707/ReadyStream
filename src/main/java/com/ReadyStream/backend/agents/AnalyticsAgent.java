@@ -4,7 +4,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AnalyticsAgent {
-    public void report(String platform) {
+    public static String report(String platform) {
         System.out.println("Reporting analytics for " + platform);
+        return platform;
     }
 }
